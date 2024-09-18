@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=".env")
+
 import os
 
 from tqdm import tqdm
@@ -11,6 +14,7 @@ import argparse
 import copy
 from openai import OpenAI
 from collections import defaultdict
+from pathlib import Path
 
 import torch
 import transformers
@@ -24,6 +28,7 @@ other_personas = [_[__:] for _, __ in zip([pattern_system_prompts, multiple_choi
 for _ in other_personas:
     personas.extend(_)
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', type=str, default='llama2_chat_7B')
@@ -33,7 +38,17 @@ def main():
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--turns', type=int, default=16)
     parser.add_argument('--runs', type=int, default=1)
+    parser.add_argument(
+        '--disable_load_in_8bit',
+        action='store_true',
+        help='Disable loading model in 8-bit, requires NVidia GPU and bitsandbytes (default: 8-bit enabled i.e. False)'
+    )
     args = parser.parse_args()
+
+    if not torch.cuda.is_available():
+        # loading with 8-bit quantization requires bitsandbytes which is
+        # currently only available on nvidia gpus
+        args.disable_load_in_8bit = True
 
     random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -56,7 +71,14 @@ def main():
         client = OpenAI()
     else:
         model = ENGINE_MAP[args.model_name]
-        tokenizer, intervened_model = load_model(model)
+
+        disable_8bit = args.disable_load_in_8bit
+        if disable_8bit:
+            load_in_8bit = False
+        else:
+            load_in_8bit = True
+
+        tokenizer, intervened_model = load_model(model, load_in_8bit=load_in_8bit)
         pipeline = transformers.pipeline(
             "text-generation",
             model=intervened_model,
@@ -88,7 +110,9 @@ def main():
             "persona": persona, 
             "user": user,
         }
-    
+
+    # TODO: handle case where we've already finished this conversation
+
     for turn in range(len(pkl["history"])+1, args.turns+1):
         pkl_copy = copy.deepcopy(pkl)
         tick = time.time()

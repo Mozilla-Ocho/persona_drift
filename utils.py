@@ -72,7 +72,7 @@ topics = [
 ENGINE_MAP = {
     'llama2_7B': 'meta-llama/Llama-2-7b-hf', 
     'llama2_chat_7B': 'meta-llama/Llama-2-7b-chat-hf', 
-    'llama2_chat_70B': 'meta-llama/Llama-2-70b-chat-hf', 
+    'llama2_chat_70B': 'meta-llama/Llama-2-70b-chat-hf',
 }
 
 B_INST, E_INST = "[INST]", "[/INST]"
@@ -157,7 +157,11 @@ def pkl2dict(pkl):
     return res
 
 
-def load_model(model):
+def load_model(model, load_in_8bit=True):
     tokenizer = AutoTokenizer.from_pretrained(model)
-    model = AutoModelForCausalLM.from_pretrained(model, device_map="auto", load_in_8bit=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        model,
+        device_map="auto",
+        load_in_8bit=load_in_8bit
+    )
     return tokenizer, model
