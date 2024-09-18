@@ -8,11 +8,24 @@ This repository provides the code for plotting persona drift in LLM-based chatbo
 
 ## Installation
 
-To install:
+To install with conda:
 ```
 conda env create -f environment.yml
 conda activate drift
 python -m ipykernel install --user --name drift --display-name "drift"
+cp .env.example .env
+# Edit .env file to fill in your OpenAI API key
+```
+
+To install with pip:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+python -m ipykernel install --user --name=drift --display-name="drift"
+cp .env.example .env
+# Edit .env file to fill in your OpenAI API key
 ```
 
 <!-- Then we download the [dataset](https://huggingface.co/datasets/Naomibas/llm-system-prompts-benchmark) by:
@@ -27,6 +40,24 @@ For example, `python run.py --model_name llama2_chat_70B --agent -1 --user -1 --
 Note that the model can be from HuggingFace or API calls like `--model_name gpt-3.5-turbo-16k`. The code is easily hackable so that you can swap in your locally built model. 
 
 You can also skip this process by downloading self-chat histories from [this google drive](https://drive.google.com/drive/folders/1Iho3KfDbpxrMzEBum_VriKaUuaMji7zu?usp=sharing) and put them into `selfchat` folder.
+
+## Run full experiment as described in the paper
+
+Use the scripts in the `scripts/` folder to run a full experiment (i.e. all 100 trial conversations). For example, to run the full experiment with `gpt-3.5-turbo-16k`:
+
+```bash
+source venv/bin/activate
+./scripts/gpt-3.5-turbo-16k.sh
+```
+
+Or you can run with a different model using
+
+```bash
+source venv/bin/activate
+./scripts/base_experiment.sh <MODEL NAME>
+```
+
+Note that currently only `llama2_7B`, `llama2_chat_7b`, and `llama2_chat_70b` are supported. @k8si will add support for more models soon.
 
 ## Plotting Persona Drift
 
