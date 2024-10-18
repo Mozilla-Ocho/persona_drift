@@ -2,7 +2,7 @@
 
 MODEL_NAME="gpt-3.5-turbo-16k"
 
-NTRIALS=100
+NTRIALS=200
 
 if [ -z "${VIRTUAL_ENV}" ]; then
     echo "VIRTUAL_ENV is not set: run 'source venv/bin/activate' first" >&2

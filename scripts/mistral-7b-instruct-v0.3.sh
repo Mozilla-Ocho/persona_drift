@@ -2,7 +2,7 @@
 
 MODEL_NAME="mistralai/Mistral-7B-Instruct-v0.3"
 
-NTRIALS=100
+NTRIALS=200
 
 if [ -z "${VIRTUAL_ENV}" ]; then
     echo "VIRTUAL_ENV is not set: run 'source venv/bin/activate' first" >&2
