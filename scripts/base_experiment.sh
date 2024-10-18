@@ -19,7 +19,7 @@ source .env
 for ((trial=0; trial<${NTRIALS}; trial++))
 do
   echo "Trial: ${trial}"
-  python run.py \
+  python run_updated.py \
   --model_name "${MODEL_NAME}" \
   --agent -1 \
   --user -1 \

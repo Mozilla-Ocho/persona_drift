@@ -6,6 +6,7 @@ from nltk.corpus import words
 
 nltk.download('punkt')
 nltk.download('words')
+nltk.download('averaged_perceptron_tagger')
 
 def is_fluent_english(text):
     english_vocab = set(w.lower() for w in words.words())

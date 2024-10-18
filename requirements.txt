@@ -1,4 +1,5 @@
-transformers==4.32.0
+#transformers==4.32.0
+transformers
 torch
 nltk==3.8.1
 requests
@@ -12,3 +13,5 @@ numpy<2
 openai
 python-dotenv
 accelerate
+sentencepiece
+protobuf
