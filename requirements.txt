@@ -1,7 +1,7 @@
 #transformers==4.32.0
 transformers
 torch
-nltk==3.8.1
+nltk==3.9
 requests
 langdetect==1.0.9
 pandas
